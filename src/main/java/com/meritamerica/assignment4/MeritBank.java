@@ -99,12 +99,17 @@ public class MeritBank {
 
 	// returns the future value of what the user wants based off of parameters
 	static double futureValue(double presentValue, double interestRate, int term) {
-		return (presentValue * (Math.pow((1 + interestRate), term)));
+		recursiveFutureValue(presentValue,term,interestRate);
+	}
+	
+	public static double recursiveFutureValue(double amount, int years, double interestRate) {
+		return 0.0;
 	}
 // reads all the information from the txt file then sends the information off to where 
 	// it needs to go weather that be checking savings cd or account holder classes
 	public static boolean readFromFile(String fileName) {
 		CDOffering offering[] = new CDOffering[0];
+//		Should also read BankAccount transactions and the FraudQueue
 		try {
 			FileReader reader = new FileReader(fileName);
 			BufferedReader bufferedReader = new BufferedReader(reader);
@@ -167,6 +172,7 @@ public class MeritBank {
 	}
 // gets the information from all the other classes and writes that into a new txt file 
 	static boolean writeToFile(String fileName) {
+//		Should also write BankAccount transactions and the FraudQueue
 		try {
 			FileWriter writer = new FileWriter(fileName);
 			BufferedWriter bufferedWriter = new BufferedWriter(writer);
@@ -210,5 +216,18 @@ public class MeritBank {
 		}
 
 	}
+	public static boolean processTransaction(Transaction transaction) throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException{
+//		If transaction does not violate any constraints, deposit/withdraw values from the relevant BankAccounts and add the transaction to the relevant BankAccounts
+//		If the transaction violates any of the basic constraints (negative amount, exceeds available balance) the relevant exception should be thrown and the processing should terminate
+//		If the transaction violates the $1,000 suspicion limit, it should simply be added to the FraudQueue for future processing
+
+	}
+	public static FraudQueue getFraudQueue() {
+		
+	}
+	public static BankAccount getBankAccount(long accountId) {
+		//Return null if account not found
+	}
+
 
 }

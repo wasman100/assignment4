@@ -8,7 +8,7 @@ import java.util.Date;
  * SavingsAccount, CheckingAccount, and CDAccount
  * Created by: Robert Johns
  */
-public class BankAccount {
+public abstract class BankAccount {
 
 	// All private variables needed in the program
 	private double balance;
@@ -116,6 +116,12 @@ public class BankAccount {
 	    	return null;
 	    }
 			
+	}
+	public void addTransaction(Transaction transaction) {
+		
+	}
+	public List<Transaction> getTransactions(){
+		
 	}
 
 }

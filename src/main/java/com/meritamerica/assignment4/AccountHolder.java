@@ -113,6 +113,10 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * checking and savings combined. created by Robert J
 	 */
 	public CheckingAccount addCheckingAccount(double openingBalance) {
+		
+//		If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
+//		Should also add a deposit transaction with the opening balance
+
 		CheckingAccount checking = new CheckingAccount(openingBalance);
 		CheckingAccount[] tempArray = new CheckingAccount[checkingAccount.length + 1];
 		for (int i = 0; i < this.checkingAccount.length; i++) {
@@ -138,6 +142,10 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * checking and savings combined. created by Robert J
 	 */
 	public CheckingAccount addCheckingAccount(CheckingAccount checkingAccount) {
+		
+//		If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
+//		Should also add a deposit transaction with the opening balance
+
 		CheckingAccount[] tempArray = new CheckingAccount[this.checkingAccount.length + 1];
 		for (int i = 0; i < this.checkingAccount.length; i++) {
 			tempArray[i] = this.checkingAccount[i];
@@ -186,6 +194,10 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * checking and savings combined. created by Robert J
 	 */
 	public SavingsAccount addSavingsAccount(double openingBalance) {
+		
+//		If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
+//		Should also add a deposit transaction with the opening balance
+
 		SavingsAccount savings = new SavingsAccount(openingBalance);
 		SavingsAccount[] tempArray = new SavingsAccount[savingsAccount.length + 1];
 		for (int i = 0; i < this.savingsAccount.length; i++) {
@@ -209,6 +221,9 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * Johns
 	 */
 	public SavingsAccount addSavingsAccount(SavingsAccount savingsAccount) {
+//		If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
+//		Should also add a deposit transaction with the opening balance
+
 		SavingsAccount[] tempArray = new SavingsAccount[this.savingsAccount.length + 1];
 		for (int i = 0; i < this.savingsAccount.length; i++) {
 			tempArray[i] = this.savingsAccount[i];
@@ -256,6 +271,9 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * created by Robert Johns
 	 */
 	public CDAccount addCDAccount(CDOffering offering, double openingBalance) {
+		
+//		Should also add a deposit transaction with the opening balance
+	
 		CDAccount cd = new CDAccount(offering, openingBalance);
 		CDAccount[] tempArray = new CDAccount[this.cdAccount.length + 1];
 		for (int i = 0; i < this.cdAccount.length; i++) {
@@ -272,6 +290,9 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * Johns
 	 */
 	public CDAccount addCDAccount(CDAccount cdAccount) {
+		
+//		Should also add a deposit transaction with the opening balance
+		
 		CDAccount[] tempArray = new CDAccount[this.cdAccount.length + 1];
 		for (int i = 0; i < this.cdAccount.length; i++) {
 			tempArray[i] = this.cdAccount[i];
