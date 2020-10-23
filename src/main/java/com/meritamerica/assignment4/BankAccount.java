@@ -2,7 +2,9 @@ package com.meritamerica.assignment4;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /*This is the main Bank Account class that will be the parent to the other bank count classes:
  * SavingsAccount, CheckingAccount, and CDAccount
@@ -15,6 +17,7 @@ public abstract class BankAccount {
 	public double interestRate;
 	public long accountNumber;
 	Date openDate;
+	ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 
 	// first constructor without account number
 	public BankAccount(double balance, double interestRate) {
@@ -96,32 +99,32 @@ public abstract class BankAccount {
 	}
 	
 	//storing the data we got from reading the file into the cd checkings or savings account
-	public static BankAccount readFromString(String accountData)throws ParseException, NumberFormatException {
-	    try {
-	    	String [] holding = accountData.split(",");
-	    	SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
-	    	Long accountNumber = Long.parseLong(holding[0]);
-	        double balance = Double.parseDouble(holding[1]);
-	        double interestRate = Double.parseDouble(holding[2]);
-	        Date accountOpenedOn = date.parse(holding[3]);
-	        return new BankAccount(accountNumber, balance, interestRate, accountOpenedOn);
-	    		
-	    }
-	    catch(ParseException  e) {
-	    	e.printStackTrace();
-	    	return null;
-	    }
-	    catch(NumberFormatException e) {
-	    	e.printStackTrace();
-	    	return null;
-	    }
-			
-	}
+//	public static BankAccount readFromString(String accountData)throws ParseException, NumberFormatException {
+//	    try {
+//	    	String [] holding = accountData.split(",");
+//	    	SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
+//	    	Long accountNumber = Long.parseLong(holding[0]);
+//	        double balance = Double.parseDouble(holding[1]);
+//	        double interestRate = Double.parseDouble(holding[2]);
+//	        Date accountOpenedOn = date.parse(holding[3]);
+//	        return new BankAccount(accountNumber, balance, interestRate, accountOpenedOn);
+//	    		
+//	    }
+//	    catch(ParseException  e) {
+//	    	e.printStackTrace();
+//	    	return null;
+//	    }
+//	    catch(NumberFormatException e) {
+//	    	e.printStackTrace();
+//	    	return null;
+//	    }
+//			
+//	}
 	public void addTransaction(Transaction transaction) {
-		
+		this.transactions.add(transaction);
 	}
+	
 	public List<Transaction> getTransactions(){
-		
+		return transactions;
 	}
-
 }

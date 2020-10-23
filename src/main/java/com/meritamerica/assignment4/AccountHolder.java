@@ -1,6 +1,6 @@
 package com.meritamerica.assignment4;
 
-
+import java.util.Arrays;
 
 /*This program is the main account holder for the project.
  *This creates a checking and savings account for the user to withdraw and deposit money.
@@ -112,56 +112,80 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * Adds new Checking Account if the total is below $250,000 before adding for
 	 * checking and savings combined. created by Robert J
 	 */
-	public CheckingAccount addCheckingAccount(double openingBalance) {
+	public CheckingAccount addCheckingAccount(double openingBalance) throws ExceedsFraudSuspicionLimitException, NegativeAmountException, ExceedsCombinedBalanceLimitException {
 		
-//		If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
-//		Should also add a deposit transaction with the opening balance
-
-		CheckingAccount checking = new CheckingAccount(openingBalance);
-		CheckingAccount[] tempArray = new CheckingAccount[checkingAccount.length + 1];
-		for (int i = 0; i < this.checkingAccount.length; i++) {
-			tempArray[i] = this.checkingAccount[i];
+		if(getCheckingBalance() + getSavingsBalance() + openingBalance >= 250000) {
+			throw new ExceedsCombinedBalanceLimitException("Aggregate balance of your Checking and Savings accounts exceeds $250,000.");
+		}
+		CheckingAccount newAccount = new CheckingAccount(openingBalance);
+		
+		DepositTransaction transaction = new DepositTransaction(newAccount, openingBalance);
+		
+		try{
+			MeritBank.processTransaction(transaction);
+		}
+		catch(NegativeAmountException exception) {
+			throw new NegativeAmountException("Can not deposit/withdraw a negative amount");
+		}
+		catch(ExceedsFraudSuspicionLimitException exception) {
+			throw new ExceedsFraudSuspicionLimitException("Transaction exceeds $1000.00 and must be reviewed prior to processing");
+		}
+		catch(Exception exception) {
+			exception.printStackTrace();
 		}
 		
-		// need to know more about this if and else if statements 
-		if (getCheckingBalance() + getSavingsBalance() + openingBalance < 250000.00) {
-			tempArray[numberOfCheckingAccount] = checking;
-			numberOfCheckingAccount++;
-		} else if (numberOfSavingsAccount > numberOfCheckingAccount) {
-			tempArray[numberOfCheckingAccount] = checking;
-			numberOfCheckingAccount++;
-		} else {
-			return checking;
+		/* A manual way to create the array.copy method.
+		* Creating a temp array that will look identical to the old array with an additional null index at the end
+		* then sets the newly created account to the null index/ last index.
+		*/
+		
+		CheckingAccount[] holding = new CheckingAccount[this.checkingAccount.length + 1];
+		for(int i = 0; i<this.checkingAccount.length; i++) {
+			holding[i] = this.checkingAccount[i];
 		}
-		checkingAccount = tempArray;
-		return checking;
+		holding[holding.length - 1] = newAccount;
+		this.checkingAccount = holding;
+		return newAccount;
 	}
 
 	/*
 	 * Adds new Checking Account if the total is below $250,000 before adding for
 	 * checking and savings combined. created by Robert J
 	 */
-	public CheckingAccount addCheckingAccount(CheckingAccount checkingAccount) {
+	public CheckingAccount addCheckingAccount(CheckingAccount checkingAccount) throws ExceedsFraudSuspicionLimitException, ExceedsCombinedBalanceLimitException, NegativeAmountException {
 		
-//		If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
-//		Should also add a deposit transaction with the opening balance
-
-		CheckingAccount[] tempArray = new CheckingAccount[this.checkingAccount.length + 1];
-		for (int i = 0; i < this.checkingAccount.length; i++) {
-			tempArray[i] = this.checkingAccount[i];
+		if(getCheckingBalance() + getSavingsBalance() + checkingAccount.getBalance() >= 250000) {
+			throw new ExceedsCombinedBalanceLimitException("Aggregate balance of your Checking and Savings accounts exceeds $250,000.");
 		}
-		// need to know more about this if and else if statements 
-		if (getCheckingBalance() + getSavingsBalance() + checkingAccount.getBalance() < 250000.00) {
-			tempArray[numberOfCheckingAccount] = checkingAccount;
-			numberOfCheckingAccount++;
-		} else if (numberOfSavingsAccount > numberOfCheckingAccount) {
-			tempArray[numberOfCheckingAccount] = checkingAccount;
-			numberOfCheckingAccount++;
-		} else {
-			return checkingAccount;
+		CheckingAccount newAccount = new CheckingAccount(checkingAccount.getBalance());
+		
+		DepositTransaction transaction = new DepositTransaction(newAccount, checkingAccount.getBalance());
+		
+		try{
+			MeritBank.processTransaction(transaction);
 		}
-		this.checkingAccount = tempArray;
-		return checkingAccount;
+		catch(NegativeAmountException exception) {
+			throw new NegativeAmountException("Can not deposit/withdraw a negative amount");
+		}
+		catch(ExceedsFraudSuspicionLimitException exception) {
+			throw new ExceedsFraudSuspicionLimitException("Transaction exceeds $1000.00 and must be reviewed prior to processing");
+		}
+		catch(Exception exception) {
+			exception.printStackTrace();
+		}
+		
+		/* A manual way to create the array.copy method.
+		* Creating a temp array that will look identical to the old array with an additional null index at the end
+		* then sets the newly created account to the null index/ last index.
+		*/
+		
+		CheckingAccount[] holding = new CheckingAccount[this.checkingAccount.length + 1];
+		for(int i = 0; i<this.checkingAccount.length; i++) {
+			holding[i] = this.checkingAccount[i];
+		}
+		holding[holding.length - 1] = newAccount;
+		this.checkingAccount = holding;
+		return newAccount;
 	}
 
 	/*
@@ -193,51 +217,75 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * Adds new Saving Account if the total is below $250,000 before adding for
 	 * checking and savings combined. created by Robert J
 	 */
-	public SavingsAccount addSavingsAccount(double openingBalance) {
+	public SavingsAccount addSavingsAccount(double openingBalance) throws ExceedsFraudSuspicionLimitException, NegativeAmountException, ExceedsCombinedBalanceLimitException {
 		
-//		If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
-//		Should also add a deposit transaction with the opening balance
-
-		SavingsAccount savings = new SavingsAccount(openingBalance);
-		SavingsAccount[] tempArray = new SavingsAccount[savingsAccount.length + 1];
-		for (int i = 0; i < this.savingsAccount.length; i++) {
-			tempArray[i] = this.savingsAccount[i];
+		if(getCheckingBalance() + getSavingsBalance() + openingBalance >= 250000) {
+			throw new ExceedsCombinedBalanceLimitException("Aggregate balance of your Checking and Savings accounts exceeds $250,000.");
 		}
-		if (getCheckingBalance() + getSavingsBalance() + openingBalance < 250000) {
-			tempArray[numberOfSavingsAccount] = savings;
-			numberOfSavingsAccount++;
-		} else if (numberOfCheckingAccount > numberOfSavingsAccount) {
-			tempArray[numberOfSavingsAccount] = savings;
-			numberOfSavingsAccount++;
-		} else {
-			return savings;
+		SavingsAccount newAccount = new SavingsAccount(openingBalance);
+		
+		DepositTransaction transaction = new DepositTransaction(newAccount, openingBalance);
+		
+		try{
+			MeritBank.processTransaction(transaction);
 		}
-		savingsAccount = tempArray;
-		return savings;
+		catch(NegativeAmountException exception) {
+			throw new NegativeAmountException("Can not deposit/withdraw a negative amount");
+		}
+		catch(ExceedsFraudSuspicionLimitException exception) {
+			throw new ExceedsFraudSuspicionLimitException("Transaction exceeds $1000.00 and must be reviewed prior to processing");
+		}
+		catch(Exception exception) {
+			exception.printStackTrace();
+		}
+		
+		/* A manual way to create the array.copy method.
+		* Creating a temp array that will look identical to the old array with an additional null index at the end
+		* then sets the newly created account to the null index/ last index.
+		*/
+		
+		SavingsAccount[] holding = new SavingsAccount[savingsAccount.length + 1];
+		for(int i = 0; i<savingsAccount.length; i++) {
+			holding[i] = savingsAccount[i];
+		}
+		holding[holding.length - 1] = newAccount;
+		savingsAccount = holding;
+		return newAccount;
 	}
 
 	/*
 	 * Adds new savings account in the array of savings account created by Robert
 	 * Johns
 	 */
-	public SavingsAccount addSavingsAccount(SavingsAccount savingsAccount) {
-//		If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
-//		Should also add a deposit transaction with the opening balance
-
-		SavingsAccount[] tempArray = new SavingsAccount[this.savingsAccount.length + 1];
-		for (int i = 0; i < this.savingsAccount.length; i++) {
-			tempArray[i] = this.savingsAccount[i];
+	public SavingsAccount addSavingsAccount(SavingsAccount savingsAccount) throws ExceedsFraudSuspicionLimitException, NegativeAmountException, ExceedsCombinedBalanceLimitException {
+		if(getCheckingBalance() + getSavingsBalance() + savingsAccount.getBalance()>= 250000) {
+			throw new ExceedsCombinedBalanceLimitException("Aggregate balance of your Checking and Savings accounts exceeds $250,000.");
 		}
-		if (getCheckingBalance() + getSavingsBalance() + savingsAccount.getBalance() < 250000) {
-			tempArray[numberOfSavingsAccount] = savingsAccount;
-			numberOfSavingsAccount++;
-		} else if (numberOfCheckingAccount > numberOfSavingsAccount) {
-			tempArray[numberOfSavingsAccount] = savingsAccount;
-			numberOfSavingsAccount++;
-		} else {
-			return savingsAccount;
+		DepositTransaction transaction = new DepositTransaction(savingsAccount, savingsAccount.getBalance());
+		try{
+			MeritBank.processTransaction(transaction);
 		}
-		this.savingsAccount = tempArray;
+		catch(NegativeAmountException exception) {
+			throw new NegativeAmountException("Can not deposit/withdraw a negative amount");
+		}
+		catch(ExceedsFraudSuspicionLimitException exception) {
+			throw new ExceedsFraudSuspicionLimitException("Transaction exceeds $1000.00 and must be reviewed prior to processing");
+		}
+		catch(Exception exception) {
+			
+		}
+		
+		/* A manual way to create the array.copy method.
+		* Creating a temp array that will look identical to the old array with an additional null index at the end
+		* then sets the newly created account to the null index/ last index.
+		*/
+		
+		SavingsAccount[] holding = new SavingsAccount[this.savingsAccount.length + 1];
+		for(int i = 0; i<this.savingsAccount.length; i++) {
+			holding[i] = this.savingsAccount[i];
+		}
+		holding[holding.length - 1] = savingsAccount;
+		this.savingsAccount = holding;
 		return savingsAccount;
 	}
 
@@ -270,36 +318,64 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * adds to cdAccount array if parameters of a new cdAccount are passed in
 	 * created by Robert Johns
 	 */
-	public CDAccount addCDAccount(CDOffering offering, double openingBalance) {
+	public CDAccount addCDAccount(CDOffering offering, double openingBalance) throws NegativeAmountException, ExceedsFraudSuspicionLimitException {
 		
 //		Should also add a deposit transaction with the opening balance
 	
-		CDAccount cd = new CDAccount(offering, openingBalance);
-		CDAccount[] tempArray = new CDAccount[this.cdAccount.length + 1];
-		for (int i = 0; i < this.cdAccount.length; i++) {
-			tempArray[i] = this.cdAccount[i];
+		if(offering == null) {
+			return null;
 		}
-		tempArray[numberOfCDAccount] = cd;
-		numberOfCDAccount++;
-		cdAccount = tempArray;
-		return cd;
+		CDAccount newAccount = new CDAccount(offering, openingBalance);
+		DepositTransaction transaction = new DepositTransaction(newAccount, openingBalance);
+		try{
+			MeritBank.processTransaction(transaction);
+		}
+		catch(NegativeAmountException exception) {
+			throw new NegativeAmountException("Can not deposit/withdraw a negative amount");
+		}
+		catch(ExceedsFraudSuspicionLimitException exception) {
+			throw new ExceedsFraudSuspicionLimitException("Transaction exceeds $1000.00 and must be reviewed prior to processing");
+		}
+		catch(Exception exception) {
+			
+		}
+		
+		// Similar to manual portion of creating an array 1 index larger.
+		CDAccount[] holding = Arrays.copyOf(cdAccount, cdAccount.length+1);
+		
+		for(int i = 0; i<cdAccount.length; i++) {
+			holding[i] = cdAccount[i];
+		}
+		holding[holding.length - 1] = newAccount;
+		cdAccount = holding;
+		return newAccount;
 	}
 
 	/*
 	 * adds to cdAcount array if CDAccount class is the parameter created by Robert
 	 * Johns
 	 */
-	public CDAccount addCDAccount(CDAccount cdAccount) {
+	public CDAccount addCDAccount(CDAccount cdAccount) throws ExceedsFraudSuspicionLimitException, NegativeAmountException {
 		
-//		Should also add a deposit transaction with the opening balance
-		
-		CDAccount[] tempArray = new CDAccount[this.cdAccount.length + 1];
-		for (int i = 0; i < this.cdAccount.length; i++) {
-			tempArray[i] = this.cdAccount[i];
+		DepositTransaction transaction = new DepositTransaction(cdAccount, cdAccount.getBalance());
+		try{
+			MeritBank.processTransaction(transaction);
 		}
-		tempArray[numberOfCDAccount] = cdAccount;
-		numberOfCDAccount++;
-		this.cdAccount = tempArray;
+		catch(NegativeAmountException exception) {
+			throw new NegativeAmountException("Can not deposit/withdraw a negative amount");
+		}
+		catch(ExceedsFraudSuspicionLimitException exception) {
+			throw new ExceedsFraudSuspicionLimitException("Transaction exceeds $1000.00 and must be reviewed prior to processing");
+		}
+		catch(Exception exception) {
+			
+		}
+		CDAccount[] holding = Arrays.copyOf(this.cdAccount,this.cdAccount.length+1);
+		for(int i = 0; i<this.cdAccount.length; i++) {
+			holding[i] = this.cdAccount[i];
+		}
+		holding[holding.length - 1] = cdAccount;
+		this.cdAccount = holding;
 		return cdAccount;
 	}
 

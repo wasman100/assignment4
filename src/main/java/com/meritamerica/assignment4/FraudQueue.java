@@ -1,14 +1,21 @@
 package com.meritamerica.assignment4;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FraudQueue {
-	FraudQueue(){
-		
+	private List<Transaction> transactions = new ArrayList<Transaction>();
+
+	FraudQueue() {
+
 	}
-	public void addTransaction(Transaction transaction) {
-		
+
+	void addTransaction(Transaction transaction) {
+		transactions.add(transaction);
 	}
-	public Transaction getTransaction() {
-		
+
+	List<Transaction> getTransaction() {
+		return transactions;
 	}
 
 }

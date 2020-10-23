@@ -88,10 +88,9 @@ public class CDAccount extends BankAccount{
 	
 	// writing the data we have stored in cd account to a string and sending it to txt file   
     public String writeToString() {
-    	StringBuilder override = new StringBuilder();
-    	override.append(writeToString()).append(",");
-    	override.append(getTerm());
-    	return override.toString();
+    	String cdAccountInfo = accountNumber+","+balance+","+interestRate+","+term+","+startDate;
+    	return cdAccountInfo;
+
     }
 
 }
