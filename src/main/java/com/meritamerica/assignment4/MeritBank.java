@@ -119,6 +119,7 @@ public class MeritBank {
 	// it needs to go weather that be checking savings cd or account holder classes
 	public static boolean readFromFile(String fileName) {
 		CDOffering[] CDOfferings = new CDOffering[0];
+		AccountHolder[] accountHolders = new AccountHolder[0];
 		setNextAccountNumber((long) 0);
 		FraudQueue fraudQueue = new FraudQueue();
 		Set<String> transactions = new HashSet<String>();
@@ -136,7 +137,9 @@ public class MeritBank {
 			
 			for(int i = 0; i < numberOfAccountHolders; i++) {
 				AccountHolder nextAccountHolder = AccountHolder.readFromString(nextLine.readLine());
-				MeritBank.addAccountHolder(nextAccountHolder);	
+				accountHolders = Arrays.copyOf(accountHolders, accountHolders.length + 1);
+				accountHolders[accountHolders.length - 1] = nextAccountHolder;
+				accountHolderArray=accountHolders;	
 				int numberOfCheckingAccounts = Integer.valueOf(nextLine.readLine());
 				for(int c = 0; c < numberOfCheckingAccounts; c++) {
 					nextAccountHolder.addCheckingAccount(CheckingAccount.readFromString(nextLine.readLine()));
@@ -163,7 +166,7 @@ public class MeritBank {
 						transactions.add(nextLine.readLine());
 					}
 				}
-					
+
 			}
 			int numberOfFraudQueueTransactions = Integer.valueOf(nextLine.readLine());
 			for(int fqt = 0; fqt < numberOfFraudQueueTransactions; fqt++) {
