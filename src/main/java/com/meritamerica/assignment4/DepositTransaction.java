@@ -3,7 +3,7 @@ import java.util.Date;
 public class DepositTransaction extends Transaction{
 	
 	DepositTransaction(BankAccount targetAccount, double amount){
-		account = null;
+		account = targetAccount;
 		this.targetAccount = targetAccount;
 		this.amount = amount;
 		this.date = new Date();

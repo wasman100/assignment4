@@ -284,6 +284,7 @@ public class MeritBank {
 						fraudQueue.addTransaction(transaction);
 						throw new ExceedsFraudSuspicionLimitException("Transaction exceeds $1000.00 and must be reviewed prior to processing");
 					}
+
 					return true;
 				}
 				if(transaction.getAmount() < 0) {
@@ -304,6 +305,11 @@ public class MeritBank {
 			if(transaction.getAmount() > 1000) {
 				fraudQueue.addTransaction(transaction);
 				throw new ExceedsFraudSuspicionLimitException("Transaction exceeds $1000.00 and must be reviewed prior to processing");
+			}
+			else{
+				source.withdraw(transaction.amount);
+				target.deposit(transaction.amount);
+
 			}
 			return true;
 	}
