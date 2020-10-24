@@ -37,6 +37,8 @@ public class MeritBank {
 		accountHolderArray = tempAccHolder;
 		numOfAccountHolder++;
 	}
+	
+	
 
 	// getter for the AccountHolder array
 	static AccountHolder[] getAccountHolders() {
@@ -118,7 +120,6 @@ public class MeritBank {
 	public static boolean readFromFile(String fileName) {
 		CDOffering[] CDOfferings = new CDOffering[0];
 		setNextAccountNumber((long) 0);
-		AccountHolder[] AccountHolders = new AccountHolder[0];
 		FraudQueue fraudQueue = new FraudQueue();
 		Set<String> transactions = new HashSet<String>();
 		try(BufferedReader nextLine = new BufferedReader(new FileReader(fileName))) {
@@ -128,7 +129,9 @@ public class MeritBank {
 			for(int i = 0; i < numberOfCDOfferings; i++) {
 				CDOfferings = Arrays.copyOf(CDOfferings, CDOfferings.length + 1);
 				CDOfferings[CDOfferings.length - 1] = CDOffering.readFromString(nextLine.readLine());
+				cdOffering = CDOfferings;
 			}
+
 			int numberOfAccountHolders = Integer.valueOf(nextLine.readLine());
 			
 			for(int i = 0; i < numberOfAccountHolders; i++) {
@@ -317,6 +320,15 @@ public class MeritBank {
 		return fraudQueue;
 	}
 	public static BankAccount getBankAccount(long accountId) {
+//		if(accountId == 4) {
+//			accountId = 12;
+//		}
+//		else if(accountId ==1) {
+//			accountId = 11;
+//		}
+//		else if(accountId == 5) {
+//			accountId = 13;
+//		}
 		for(AccountHolder account : accountHolderArray) {
  			for(int c = 0; c < account.getCheckingAccounts().length; c++) {
 				if(accountId == account.getCheckingAccounts()[c].getAccountNumber()) {

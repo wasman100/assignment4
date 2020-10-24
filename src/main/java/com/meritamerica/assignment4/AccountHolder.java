@@ -113,7 +113,6 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * checking and savings combined. created by Robert J
 	 */
 	public CheckingAccount addCheckingAccount(double openingBalance) throws ExceedsFraudSuspicionLimitException, NegativeAmountException, ExceedsCombinedBalanceLimitException {
-		
 		if(getCheckingBalance() + getSavingsBalance() + openingBalance >= 250000) {
 			throw new ExceedsCombinedBalanceLimitException("Aggregate balance of your Checking and Savings accounts exceeds $250,000.");
 		}
@@ -153,14 +152,10 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 	 * checking and savings combined. created by Robert J
 	 */
 	public CheckingAccount addCheckingAccount(CheckingAccount checkingAccount) throws ExceedsFraudSuspicionLimitException, ExceedsCombinedBalanceLimitException, NegativeAmountException {
-		
-		if(getCheckingBalance() + getSavingsBalance() + checkingAccount.getBalance() >= 250000) {
+		if(getCheckingBalance() + getSavingsBalance() + checkingAccount.getBalance()>= 250000) {
 			throw new ExceedsCombinedBalanceLimitException("Aggregate balance of your Checking and Savings accounts exceeds $250,000.");
 		}
-		CheckingAccount newAccount = new CheckingAccount(checkingAccount.getBalance());
-		
-		DepositTransaction transaction = new DepositTransaction(newAccount, checkingAccount.getBalance());
-		
+		DepositTransaction transaction = new DepositTransaction(checkingAccount, checkingAccount.getBalance());
 		try{
 			MeritBank.processTransaction(transaction);
 		}
@@ -171,7 +166,7 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 			throw new ExceedsFraudSuspicionLimitException("Transaction exceeds $1000.00 and must be reviewed prior to processing");
 		}
 		catch(Exception exception) {
-			exception.printStackTrace();
+			
 		}
 		
 		/* A manual way to create the array.copy method.
@@ -183,9 +178,9 @@ public class AccountHolder implements Comparable<AccountHolder>  {
 		for(int i = 0; i<this.checkingAccount.length; i++) {
 			holding[i] = this.checkingAccount[i];
 		}
-		holding[holding.length - 1] = newAccount;
+		holding[holding.length - 1] = checkingAccount;
 		this.checkingAccount = holding;
-		return newAccount;
+		return checkingAccount;
 	}
 
 	/*
