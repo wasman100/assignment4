@@ -46,7 +46,6 @@ public abstract class Transaction {
 	/**
 	 * A method that writes information that writes the date passed through into a string.
 	 * Reformatted date to be simpler. 
-	 * @return
 	 */
 	public String writeToString() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -67,9 +66,6 @@ public abstract class Transaction {
 	}
 	/**
 	 *Read from String , gets data thats being passed through, and returns Transaction with the information 
-	 * @param transactionDataString
-	 * @return
-	 * @throws ParseException
 	 */
 	public static Transaction readFromString(String transactionDataString) throws ParseException {
 		String[] temp = transactionDataString.split(",");

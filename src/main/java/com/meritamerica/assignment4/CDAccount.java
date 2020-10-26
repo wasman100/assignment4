@@ -68,7 +68,8 @@ public class CDAccount extends BankAccount{
     }
 	
 	public double futureValue() {
-		return (super.getBalance() * Math.pow(1.0 + offering.getInterestRate(), offering.getTerm()));
+		//return (super.getBalance() * Math.pow(1.0 + offering.getInterestRate(), offering.getTerm()));
+		return MeritBank.recursiveFutureValue(super.getBalance(), offering.getTerm(), offering.getInterestRate());
 		
 		
 	}

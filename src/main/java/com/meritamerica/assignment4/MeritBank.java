@@ -294,7 +294,7 @@ public class MeritBank {
 					return true;
 				}
 				if(transaction.getAmount() < 0) {
-					throw new NegativeAmountException("Can not withdraw a negative amount");
+					throw new NegativeAmountException("Can not deposit a negative amount");
 				}
 				if(transaction.getAmount() > 1000) {
 					fraudQueue.addTransaction(transaction);
@@ -306,7 +306,7 @@ public class MeritBank {
 				throw new ExceedsAvailableBalanceException("Insufficient Balance");
 			}
 			if(transaction.getAmount() < 0) {
-				throw new NegativeAmountException("Can not withdraw a negative amount");
+				throw new NegativeAmountException("Can not transfer a negative amount");
 			}
 			if(transaction.getAmount() > 1000) {
 				fraudQueue.addTransaction(transaction);
